@@ -1,0 +1,22 @@
+/* [logical_operator_1.c (and, or, not 연산자)]
+int main() {
+	int a = 99;
+
+	printf("AND 연산: %d \n", (a >= 100) && (a <= 200));
+	printf("OR 연산: %d \n", (a >= 100) || (a <= 200));
+	printf("NOT 연산: %d \n", !(a >= 100));
+	
+	return 0;
+}
+*/
+
+/* [logical_operator_2.c (비트 연산으로 if문 대체)]
+int main() {
+	char a = 3;
+
+	a > 2 && a++;
+	a > 2 || a++; // or 연산자는 하나만 True여도 True로 판별되기에 앞에 조건이 True면 뒤에 조건을 확인하지 않고 넘어간다. 따라서 앞이 True인 다음과 같은 조건에서는 뒤에 a++ 실행을 안하고 넘어간다.
+	printf("a = %d\n", a);
+	return 0;
+}
+*/
