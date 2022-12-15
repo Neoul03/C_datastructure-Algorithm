@@ -1,0 +1,46 @@
+/* [local_global_variables_1.c(지역 / 전역 변수 구분)]
+int a = 100;
+
+void func1() {
+	int a = 200;
+	printf("func1()에서 a의 값 ==> %d\n", a);
+}
+
+int main() {
+	func1();
+	printf("main()에서 a의 값 ==> %d\n", a);
+	
+	return 0;
+}
+*/
+
+/* [call_by_value_1.c]
+void func1(int a) {
+	a = a + 1;
+	printf("전달받은 a ==> %d\n", a);
+}
+
+int main() {
+	int a = 10;
+
+	func1(a);
+	printf("func1() 실행 후의 a ==> %d\n", a);
+	
+	return 0;
+}
+*/
+
+/* [call_by_reference_1.c]
+void func1(int *a) {
+	*a += 1;
+	printf("전달받은 a ==> %d\n", *a);
+}
+
+int main() {
+	int a = 10;
+
+	func1(&a);
+	printf("func1() 실행 후의 a ==> %d\n", a);
+	return 0;
+}
+*/
