@@ -1,0 +1,130 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+#define cQ_SIZE 10000
+
+typedef int element;
+
+typedef struct queueType{
+    element queue[cQ_SIZE];
+    int front;
+    int rear;
+} QueueType;
+
+
+
+QueueType* createCQueue() {
+    QueueType* cQ;
+    cQ = (QueueType*)malloc(sizeof(QueueType));
+    cQ->front = 0;
+    cQ->rear = 0;
+    return cQ;
+}
+
+int isEmpty(QueueType* cQ) {
+    if (cQ->front == cQ->rear) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+int isFull(QueueType* cQ) {
+    if (((cQ->rear + 1) % cQ_SIZE) == cQ->front) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+void push(QueueType* cQ, element item) {
+    if (isFull(cQ)) {
+        return;
+    }
+    else {
+        cQ->rear = (cQ->rear + 1) % cQ_SIZE;
+        cQ->queue[cQ->rear] = item;
+    }
+}
+
+element pop(QueueType* cQ) {
+    if (isEmpty(cQ)) {
+        return -1;
+    }
+    else {
+        cQ->front = (cQ->front + 1) % cQ_SIZE;
+        return cQ->queue[cQ->front];
+    }
+}
+
+element front(QueueType* cQ) {
+    if (isEmpty(cQ)) {
+        return -1;
+    }
+    else {
+        return cQ->queue[(cQ->front + 1) % cQ_SIZE];
+    }
+}
+
+element back(QueueType* cQ) {
+    if (isEmpty(cQ)) {
+        return -1;
+    }
+    else {
+        return cQ->queue[cQ->rear];
+    }
+}
+
+element size(QueueType* cQ) {
+    int front = cQ->front;
+    int count = 0;
+
+    while (front != cQ->rear) {
+        front = (front + 1) % cQ_SIZE;
+        count++;
+    }
+
+    return count;
+}
+
+
+
+
+
+
+int main(void) {
+    char action[20] = "";
+    int cycle = 0;
+    element num = NULL;
+    QueueType* cQ = createCQueue();
+    scanf("%d", &cycle);
+
+    for (int i = 0; i < cycle; i++) {
+        scanf("%s", &action);
+
+        if (strcmp("push", action) == 0) {
+            int num;//문자 이후에 포함되어 있는 숫자
+            scanf("%d", &num);
+            push(cQ, num);
+        }
+        else if (strcmp("pop", action) == 0) {
+            printf("%d\n", pop(cQ));
+        }
+        else if (strcmp("size", action) == 0) {
+            printf("%d\n", size(cQ));
+        }
+        else if (strcmp("empty", action) == 0) {
+            printf("%d\n", isEmpty(cQ));
+        }
+        else if (strcmp("front", action) == 0) {
+            printf("%d\n", front(cQ));
+        }
+        else if (strcmp("back", action) == 0) {
+            printf("%d\n", back(cQ));
+        }
+    }
+    return 0;
+}
