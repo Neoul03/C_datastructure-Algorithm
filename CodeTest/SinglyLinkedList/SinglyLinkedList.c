@@ -5,88 +5,192 @@
 
 #include "SinglyLinkedList.h"
 
-void getStr(char* str) {
-    memset(str, ' ', 4 * sizeof(char));
-    scanf("%s", str);
-    rewind(stdin);
+// Create an empty linked list
+linkedList_h* createLinkedList_h(void) {
+	linkedList_h* L;
+	L = (linkedList_h*)malloc(sizeof(linkedList_h));
+	L->head = NULL;
+	return L;
 }
 
-int main(void) {
-    int action = 0;
-    char str[4] = "";
-    char pre[4] = "";
-    linkedList_h* L;
-    listNode* p;
-    L = createLinkedList_h();
+// Free all memories
+void freeLinkedList(linkedList_h* L) {
+	listNode* temp = L->head;
+	listNode* del = NULL;
+	
+	while (temp != NULL) {
+		del = temp;
+		temp = temp->link;
+		free(del);
+	}
+	L->head = NULL;
+}
 
-    while (1) {
-        printf("Choose action: \n");
-        printf("1: push_front, 2: push_back, 3: insert, 4: pop_front, 5: pop_back\n");
-        printf("6: erase, 7: find, 8: reverse, 9: free, 10: end\n");
-        scanf("%d", &action);
-        rewind(stdin);
+// Print all nodes
+void print(linkedList_h* L) {
+	listNode* temp;
+	temp = L->head;
+	while (temp != NULL) 
+	{
+		printf("%s ", temp->data);
+		temp = temp->link;
+	}
 
-        switch (action) {
-        case 1:
-            printf("String to push: ");
-            getStr(str); 
-            push_front(L, str);
-            print(L);
-            break;
-        case 2:
-            printf("String to push: ");
-            getStr(str);
-            push_back(L, str);
-            print(L);
-            break;
-        case 3:
-            printf("String of the previous node: ");
-            getStr(pre);
-            printf("String to push: ");
-            getStr(str);
-            insert(L, find(L, pre), str);
-            print(L);
-            break;
-        case 4:
-            pop_front(L);
-            print(L);
-            break;
-        case 5:
-            pop_back(L);
-            print(L);
-            break;
-        case 6:
-            printf("String of node to delete: ");
-            getStr(str);
-            erase(L, find(L, str));
-            print(L);
-            break;
-        case 7:
-            printf("String of node to find: ");
-            getStr(str);
-            p = find(L, str);
-            if (p != NULL) {
-                printf("data: %s, link: %x\n", p->data, p->link);
-            }
-            else {
-                printf("Not found\n");
-            }
-            break;
-        case 8:
-            reverse(L);
-            print(L);
-            break;
-        case 9:
-            freeLinkedList(L);
-            print(L);
-            break;
-        case 10:
-            printf("End the program\n");
-            exit(0);
-            break;
-        default:
-            printf("Wrong option: %d\n", action);
-        }
-    }
-    return 0;
+	printf("\n");
+}
+
+// Insert new node at front
+void push_front(linkedList_h* L, char* x) {
+	listNode* new_node;
+	new_node = (listNode*)malloc(sizeof(listNode));
+	strcpy(new_node->data, x);
+	new_node->link = L->head;
+	L->head = new_node;
+}
+
+// Insert new node at back
+void push_back(linkedList_h* L, char* x) {
+	listNode* new_node;
+	new_node = (listNode*)malloc(sizeof(listNode));
+	strcpy(new_node->data, x);
+	new_node->link = NULL;
+
+	if (L->head == NULL) {
+		L->head = new_node;
+	}
+	else {
+		listNode* temp;
+		temp = (listNode*)malloc(sizeof(listNode));
+		temp = L->head;
+		while (temp->link != NULL) {
+			temp = temp->link;
+		}
+		temp->link = new_node;
+	}
+
+}
+
+// Insert new node behind pre node
+void insert(linkedList_h* L, listNode* pre, char* x) {
+	if (pre != NULL) {
+		listNode* new_node;
+		new_node = (listNode*)malloc(sizeof(listNode));
+		strcpy(new_node->data, x);
+		if (L->head == NULL) {
+			L->head = new_node;
+			new_node->link = NULL;
+		}
+		else {
+			new_node->link = pre->link;
+			pre->link = new_node;
+		}
+	}
+	else {
+		printf("Not found\n");
+	}
+}
+
+// Delete node p
+void erase(linkedList_h* L, listNode* p) {
+	if (L->head == NULL) {
+		printf("Empty list!\n");
+	}
+	else {
+		if (p != NULL) {
+			listNode* pre = L->head;
+			while (pre->link != p) {
+				pre = pre->link;
+			}
+			pre->link = p->link;
+			free(p);
+		}
+		else{
+			printf("Not found\n");
+		}
+	}
+}
+
+// Delete node at front
+void pop_front(linkedList_h* L) {
+	if (L->head == NULL) {
+		printf("Empty list!\n");
+	}
+	else{
+		listNode* ptr = L->head;
+		L->head = L->head->link;
+		free(ptr);
+	}
+}
+
+// Delete node at back
+void pop_back(linkedList_h* L) {
+	if (L->head == NULL) {
+		printf("Empty list!\n");
+	}
+	else if(L->head->link == NULL){
+		free(L->head);
+		L->head == NULL;
+	}
+	else{
+		listNode* temp;
+		temp = L->head;
+		while (temp->link->link != NULL) {
+			temp = temp->link;
+		}
+		listNode* ptr = temp->link;
+		temp->link = NULL;
+		free(ptr);
+	}
+}
+
+// Search node which contains x
+listNode* find(linkedList_h* L, char* x) {
+	listNode* temp;
+	temp = L->head;
+	while(temp != NULL){
+		if (strcmp(temp->data, x) == 0) {
+			break;
+		}
+		else {
+			temp = temp->link;
+		}
+	}
+	return temp;
+}
+
+// Reverse the order of nodes in list
+void reverse(linkedList_h* L) {
+
+	listNode* prev = L->head;
+	listNode* curr = NULL;
+	listNode* next = NULL;
+
+	if (prev != NULL)
+	{
+		curr = prev->link;
+	}
+	else
+	{
+		return;
+	}
+
+	while (curr != NULL) {
+
+		if (curr->link != NULL)
+		{
+			next = curr->link;
+		}
+		else
+		{
+			curr->link = prev;
+			L->head->link = NULL;
+			L->head = curr;
+			break;
+		}
+		
+		curr->link = prev;
+
+		prev = curr;
+		curr = next;
+	}
 }
