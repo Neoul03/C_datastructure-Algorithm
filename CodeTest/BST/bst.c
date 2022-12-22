@@ -48,7 +48,7 @@ treeNode* insert(treeNode* bsT, element x) {
 	} 
 	
 	treeNode* new_node = NULL;
-	new_node = (treeNode*)malloc(sizeof(treeNode*));
+	new_node = (treeNode*)malloc(sizeof(treeNode));
 
 	new_node->key = x;
 	new_node->left = NULL;
@@ -76,7 +76,7 @@ treeNode* insert(treeNode* bsT, element x) {
 void erase(treeNode* root, element key) {
 	treeNode* p = root; // 삭제할 key의 노드 포인터
 	treeNode* parent; // p의 부모노드 포인터
-	parent = (treeNode*)malloc(sizeof(treeNode*)); // p가 루트인 경우를 대비하여 p를 가르키는 parent 포인터를 생성
+	parent = (treeNode*)malloc(sizeof(treeNode)); // p가 루트인 경우를 대비하여 p를 가르키는 parent 포인터를 생성
 	parent->key = NULL;
 	parent->right = root;
 	parent->left = root;
