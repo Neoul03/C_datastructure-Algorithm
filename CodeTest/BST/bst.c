@@ -130,6 +130,8 @@ void erase(treeNode* root, element key) {
 				parent->right = p->right;
 			}
 		}
+		
+		free(p)
 	}
 
 	// 삭제할 노드의 차수가 2인 경우
